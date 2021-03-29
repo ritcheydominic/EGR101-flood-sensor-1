@@ -7,7 +7,7 @@
 // ---------------------------------------------------------------- //
 
 #include <SPI.h>
-#include <WiFi.h>
+#include <WiFiNINA.h>
 #include <BlynkSimpleWifi.h>
 
 #define echoPin 2 // attach pin D2 Arduino to pin Echo of HC-SR04
@@ -18,12 +18,12 @@
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
-char auth[] = "YourAuthToken";
+char auth[] = "tiFjvOE3bt7NCI0ucEUBdGVPvfrpd9v8";
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "YourNetworkName";
-char pass[] = "YourPassword";
+char ssid[] = "G8P3X128";
+char pass[] = "yeeyeeland";
 
 // defines variables
 long duration; // variable for the duration of sound wave travel
@@ -53,8 +53,8 @@ void setup() {
   //Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 80);
   //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8080);
 
-  // Setup a function to be called every 10 minutes
-  timer.setInterval(600000L, myTimerEvent);
+  // Setup a function to be called every second
+  timer.setInterval(1000L, myTimerEvent);
 }
 
 void loop() {
@@ -69,8 +69,8 @@ void loop() {
   duration = pulseIn(echoPin, HIGH);
   // Calculating the distance
   distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
-  // Displays the distance on the Serial Monitor
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  Serial.println(" cm");
+//  // Displays the distance on the Serial Monitor
+//  Serial.print("Distance: ");
+//  Serial.print(distance);
+//  Serial.println(" cm");
 }
