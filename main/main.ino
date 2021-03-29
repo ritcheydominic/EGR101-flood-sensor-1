@@ -73,4 +73,7 @@ void loop() {
 //  Serial.print("Distance: ");
 //  Serial.print(distance);
 //  Serial.println(" cm");
+
+  Blynk.run();
+  timer.run();
 }
