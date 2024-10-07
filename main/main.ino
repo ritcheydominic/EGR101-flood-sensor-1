@@ -21,26 +21,35 @@ char wifiPassword[] = "yeeyeeland";
 long duration; // Duration of sound wave travel
 int distance; // Distance measurement (in cm)
 
-int distances[100];
-int distancesIndex;
+//int distances[100];
+//int distancesIndex;
 
-BlynkTimer pollAndUpdateTimer;
+BlynkTimer updateBlynkTimer;
 
-// Polls ultrasonic sensor for value every 8 seconds and calls ::updateBlynk every 10 minutes (600 seconds)
+//// Polls ultrasonic sensor for value every 8 seconds and calls ::updateBlynk every 10 minutes (600 seconds)
+//void pollAndUpdate() {
+//  distances[distancesIndex] = distance;
+//
+//  if (distancesIndex == 99) {
+//    updateBlynk();
+//    distancesIndex = 0;
+//  } else {
+//    distancesIndex++;
+//  }
+//}
+
+//// Updates Blynk with median sensor value and notifications every 10 minutes (600 seconds)
+//void updateBlynk() {
+//  // TODO
+//}
+
 void pollAndUpdate() {
-  distances[distancesIndex] = distance;
+  Blynk.virtualWrite(V5, distance);
+  Blynk.virtualWrite(V6, distance);
 
-  if (distancesIndex == 99) {
-    updateBlynk();
-    distancesIndex = 0;
-  } else {
-    distancesIndex++;
+  if (distance > 183) {
+    Blynk.notify("Flash flooding imminent--evacuate flood area!");
   }
-}
-
-// Updates Blynk with median sensor value and notifications every 10 minutes (600 seconds)
-void updateBlynk() {
-  // TODO
 }
 
 void setup() {
@@ -52,10 +61,12 @@ void setup() {
 
   Blynk.begin(authToken, wifiSsid, wifiPassword);
 
-  distancesIndex = 0;
+//  distancesIndex = 0;
 
-  // Timer calls ::pollAndUpdate every 8 seconds
-  updateBlynkTimer.setInterval(8000L, pollAndUpdate);
+//  // Timer calls ::pollAndUpdate every 8 seconds
+//  updateBlynkTimer.setInterval(8000L, pollAndUpdate);
+
+  updateBlynkTimer.setInterval(1000L, pollAndUpdate);
 }
 
 void loop() {
@@ -73,4 +84,7 @@ void loop() {
 
   // Calculate distance (speed of sound wave divided by 2 [go and back])
   distance = duration * 0.034 / 2;
+
+  Blynk.run();
+  updateBlynkTimer.run();
 }
