@@ -12,6 +12,7 @@
 
 #define echoPin 2 // attach pin D2 Arduino to pin Echo of HC-SR04
 #define trigPin 3 //attach pin D3 Arduino to pin Trig of HC-SR04
+#define PIPE_HEIGHT 304
 
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
@@ -38,7 +39,12 @@ void myTimerEvent()
 {
   // You can send any value at any time.
   // Please don't send more that 10 values per second.
-  Blynk.virtualWrite(V5, distance);
+  Blynk.virtualWrite(V5, PIPE_HEIGHT - distance);
+  Blynk.virtualWrite(V6, PIPE_HEIGHT - distance);
+
+  if (PIPE_HEIGHT - distance > 138) {
+    Blynk.notify("Flash flooding imminent--evacuate flood area!");
+  }
 }
 
 void setup() {
@@ -50,8 +56,8 @@ void setup() {
 
   Blynk.begin(auth, ssid, pass);
   // You can also specify server:
-  //Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 80);
-  //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8080);
+  //  Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 80);
+  //  Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8080);
 
   // Setup a function to be called every second
   timer.setInterval(1000L, myTimerEvent);
@@ -69,10 +75,10 @@ void loop() {
   duration = pulseIn(echoPin, HIGH);
   // Calculating the distance
   distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
-//  // Displays the distance on the Serial Monitor
-//  Serial.print("Distance: ");
-//  Serial.print(distance);
-//  Serial.println(" cm");
+  //  // Displays the distance on the Serial Monitor
+  //  Serial.print("Water Height: ");
+  //  Serial.print(PIPE_HEIGHT - distance);
+  //  Serial.println(" cm");
 
   Blynk.run();
   timer.run();
